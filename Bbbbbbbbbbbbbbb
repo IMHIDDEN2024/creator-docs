@@ -1,0 +1,44 @@
+```lua
+-- Constants
+local COIN_SPAWN_TIME = 5 -- Time in seconds between coin spawns
+local COIN_LIFETIME = 10 -- Time in seconds before a coin disappears
+
+-- Variables
+local coinsCollected = 0
+local coinSpawnDelay = COIN_SPAWN_TIME
+
+-- Function to spawn a coin
+local function spawnCoin()
+    local coin = Instance.new("Part")
+    coin.Shape = Enum.PartType.Ball
+    coin.Size = Vector3.new(2, 2, 2)
+    coin.Position = Vector3.new(math.random(-30, 30), 1, math.random(-30, 30))
+    coin.Anchored = true
+    coin.BrickColor = BrickColor.new("Bright yellow")
+    coin.Parent = workspace
+
+    -- Destroy the coin after COIN_LIFETIME
+    wait(COIN_LIFETIME)
+    coin:Destroy()
+end
+
+-- Function to handle triggering the collection of coins
+local function onTouched(coin, player)
+    if player:IsA("Humanoid") then
+        coinsCollected = coinsCollected + 1
+        print(player.Name .. " collected a coin. Total: " .. coinsCollected)
+        coin:Destroy()
+    end
+end
+
+-- Main game loop
+while true do
+    wait(1)
+    coinSpawnDelay = coinSpawnDelay - 1
+
+    if coinSpawnDelay <= 0 then
+        spawnCoin()
+        coinSpawnDelay = COIN_SPAWN_TIME
+    end
+end
+```
